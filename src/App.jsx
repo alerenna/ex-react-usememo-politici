@@ -1,4 +1,23 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, memo } from 'react'
+
+const Card = memo(({ name, image, position, biography }) => {
+  console.log("Card");
+
+  return (
+    <div className="col-md-3 mb-4">
+      <div className="card">
+        <img className='card-img-top' src={image} alt={name} />
+        <div className="card-body">
+          <h2 className='card-title'>Nome: {name}</h2>
+          <p className="card-subtitle mb-2 text-muted">Posizione: {position}</p>
+          <p className="card-text">{biography}</p>
+        </div>
+      </div>
+    </div>
+  )
+})
+
+
 
 
 function App() {
@@ -37,16 +56,7 @@ function App() {
           onChange={e => setSearch(e.target.value)}
         />
         {filteredPoliticians.map(politician => (
-          <div className="col-md-3 mb-4" key={politician.id}>
-            <div className="card" style={{ width: "18rem" }}>
-              <img className='card-img-top' src={politician.image} alt={politician.name} />
-              <div className="card-body">
-                <h2 className='card-title'>Nome: {politician.name}</h2>
-                <p className="card-subtitle mb-2 text-muted">Posizione: {politician.position}</p>
-                <p className="card-text">{politician.biography}</p>
-              </div>
-            </div>
-          </div>
+          <Card {...politician} key={politician.id} />
         ))}
       </div>
     </div>
@@ -59,11 +69,11 @@ export default App
 
 /* 
 
-📌 Milestone 2: Implementare la ricerca ottimizzata
-- Aggiungi un campo di ricerca (<input type="text">) sopra la lista dei politici.
-- Permetti all’utente di filtrare i risultati in base a nome o biografia (se il testo cercato è incluso). Suggerimento: Creare un array derivato filtrato, che viene aggiornato solo quando cambia la lista di politici o il valore della ricerca.
-- ❌ Non usare useEffect per aggiornare l’array filtrato.
+📌 Milestone 3: Ottimizzare il rendering delle card con React.memo
+- Attualmente, ogni volta che l’utente digita nella barra di ricerca, tutte le card vengono ri-renderizzate, anche quelle che non sono cambiate.
+- Usa React.memo() per evitare il ri-render delle card quando le loro props non cambiano.
+- Aggiungi un console.log() dentro il componente Card per verificare che venga renderizzato solo quando necessario.
 
-Obiettivo: Migliorare le prestazioni evitando ricalcoli inutili quando il valore della ricerca non cambia.
+Obiettivo: Se la lista filtrata cambia, solo le nuove card devono essere renderizzate, mentre le altre rimangono in memoria senza essere ridisegnate.
 
 */
